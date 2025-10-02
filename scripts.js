@@ -71,12 +71,61 @@ document.addEventListener('DOMContentLoaded', function() {
 // document.addEventListener("keydown", (event) => {
 //     // Your code here!
 // });
+document.addEventListener('keydown', (event) => {
+    // Convert the key to uppercase so it's consistent
+    const key = event.key.toUpperCase();
+
+    // Log the raw key press for debugging
+    logDebug(`Key pressed: ${event.key}`);
+
+    // Check if the game is over
+    if (gameOver) {
+        logDebug("Game is over — input ignored");
+        return;
+    }
+
+    if (key === "BACKSPACE") {
+        deleteLetter();
+    } else if (key === "ENTER") {
+        submitGuess();
+    } else if (/^[A-Z]$/.test(key)) {
+        addLetter(key);
+    } else {
+        // Anything else (numbers, symbols, etc.) gets ignored
+        logDebug(`Ignored key: ${event.key}`);
+    }       
+
+    })
+
 
 // TODO: Implement addLetter function
-// function addLetter(letter) {
-//     // Your code here!
-// }
+function addLetter(letter) {
+    logDebug(`🎯 addLetter("${letter}") called`, 'info');
 
+    // Check if current row is already full 
+    if (currentTile >= 5) {
+        logDebug(" Cannot add letter — row is full!", 'error');
+        return;
+    }
+
+    // Get the current row and its tiles
+    const row = rows[currentRow];
+    const tiles = row.querySelectorAll('.tile');
+
+    // Get the specific tile we’re filling
+    const tile = tiles[currentTile];
+
+    // Set the tile content and apply styling
+    tile.textContent = letter;
+    tile.classList.add('filled');
+
+    // Move to the next tile
+    currentTile++;
+
+    // Log what just happened
+    logDebug(`Letter "${letter}" placed at row ${currentRow}, tile ${currentTile}`, 'success');
+    logDebug(`Current word: "${getCurrentWord()}"`, 'info');
+}
 // TODO: Implement deleteLetter function  
 // function deleteLetter() {
 //     // Your code here!
