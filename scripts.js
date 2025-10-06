@@ -158,9 +158,52 @@ logDebug("deleteLetter() called", "info");
 
 
 // TODO: Implement submitGuess function
-// function submitGuess() {
-//     // Your code here!
-// }
+function submitGuess() {
+    logDebug("submitGuess() called", "info");
+
+    if (currentTile !== 5) {
+        alert("Not enough letters!");
+        logDebug("Guess must be 5 letters long", "error");
+        return;
+    }
+
+    const row = rows[currentRow];
+    const tiles = row.querySelectorAll(".tile");
+
+    let guess = "";
+    tiles.forEach(tile => {
+        guess += tile.textContent;
+    });
+
+    logDebug(`Guess submitted: "${guess}"`, "info");
+    logDebug(`Target word: "${TARGET_WORD}"`, "info");
+
+    //checkGuess(guess, tiles); 
+
+    if (guess === TARGET_WORD) {
+        gameOver = true;
+        setTimeout(() => alert("Congratulations! You won!"), 500);
+        logDebug("Game over - player won", "success");
+        return;
+    }
+
+    // Move to the next row
+    currentRow++;
+    currentTile = 0;
+
+    if (currentRow >= 6) {
+        gameOver = true;
+        setTimeout(() => alert(`Game over! The word was: ${TARGET_WORD}`), 500);
+        logDebug("Game over - player lost", "error");
+        return;
+    }
+
+    logDebug(`Moving to row ${currentRow}. Game continues.`, "info");
+}
+
+
+
+
 
 // TODO: Implement checkGuess function (the hardest part!)
 // function checkGuess(guess, tiles) {
